@@ -2,7 +2,11 @@ package edu.virginia.cs;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Make sure you updated the build.gradle " +
-                "file to point to the right main class");
+        //first step : make database - use separate class and 1 call for that
+        database Database = new database();
+        UserInterface user = new UserInterface();
+
+        Database.setUpDBandTables();
+        user.runInterface();
     }
 }
