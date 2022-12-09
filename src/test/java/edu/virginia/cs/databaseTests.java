@@ -36,4 +36,23 @@ public class databaseTests {
         db.disconnect();
         assertEquals(1, 1);
     }
+    @Test
+    public void insertReviewTest() throws SQLException {
+        db.connect();
+        db.deleteTables();
+        db.createTables();
+        db.insertStudent("name1", "pass1");
+        db.insertCourse("TS", "2147");
+        db.insertCourse("CS", "2130");
+        db.insertReview("name1", "cs", "2130", "testing part 2", "4");
+        db.disconnect();
+    }
+    @Test
+    public void checkReviewForStudentTest() throws SQLException {
+        db.connect();
+        //db.insertStudent("name1", "pass1");
+        //db.insertReview(1, 34, "testing", 5);
+        db.checkReviewForStudent("cs", "3140", "name1");
+        db.disconnect();
+    }
 }
