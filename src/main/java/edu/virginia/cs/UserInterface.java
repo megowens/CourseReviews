@@ -21,21 +21,25 @@ public class UserInterface {
     private void MainMenu(){
         String mmOptions = promptAndRead("Main Menu\nWould you like to:\n*Submit a review for a course (press a)" +
                 "\n*See reviews for a course (press b)\n*Log out (press c)");
-        if(mmOptions.contains("c")) {
+        if(mmOptions.equals("c")) {
             login();
             MainMenu();
         }
-        else if(mmOptions.contains("a")) {
+        else if(mmOptions.equals("a")) {
             String courseName = promptAndRead("Enter course name in form of department then number (such as 'CS 3140'): ");
             checkCourseName(courseName);
             String[] courseSplit = courseName.split(" ");
             submitReview(courseSplit[0], courseSplit[1], studentName);
         }
-        else if(mmOptions.contains("b")){
+        else if(mmOptions.equals("b")){
             String courseName = promptAndRead("Enter course name in form of department then number (such as 'CS 3140'): ");
             checkCourseName(courseName);
             String[] courseSplit = courseName.split(" ");
             seeReview(courseSplit[0], courseSplit[1]);
+        }
+        else{
+            System.out.println("Invalid option: please enter either a, b, or c");
+            MainMenu();
         }
     }
     private void submitReview(String dept, String catalogNum, String studentName){
@@ -70,7 +74,7 @@ public class UserInterface {
     }
     private void login(){
         String login = promptAndRead("Welcome: Login as existing user (press 1) or create new user (press 2)");
-        if(login.contains("1")) {
+        if(login.equals("1")) {
             String username = promptAndRead("Please enter username and password \nusername: ");
             String password = promptAndRead("password: ");
             if(db.checkForStudent(username, password)){
@@ -81,7 +85,7 @@ public class UserInterface {
                 login();
             }
         }
-        else if(login.contains("2")) {
+        else if(login.equals("2")) {
             String username = promptAndRead("Please create a username and password \nusername: ");
             String password = promptAndRead("password: ");
             String confirmPass = promptAndRead("confirm password: ");
@@ -94,6 +98,9 @@ public class UserInterface {
                 System.out.println("Passwords do not match- please log in again");
                 login();
             }
+        } else {
+            System.out.println("Invalid entry: please enter either 1 or 2");
+            login();
         }
     }
     private void checkCourseName(String course) {

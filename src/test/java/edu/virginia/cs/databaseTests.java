@@ -39,12 +39,13 @@ public class databaseTests {
     @Test
     public void insertReviewTest() throws SQLException {
         db.connect();
-        db.deleteTables();
-        db.createTables();
-        db.insertStudent("name1", "pass1");
-        db.insertCourse("TS", "2147");
-        db.insertCourse("CS", "2130");
-        db.insertReview("name1", "cs", "2130", "testing part 2", "4");
+        //db.deleteTables();
+        //db.createTables();
+        db.insertStudent("John", "pass3");
+        db.insertCourse("COMM", "3140");
+        db.insertCourse("ART", "1100");
+        db.insertReview("John", "COMM", "3140", "did not like it", "1");
+        db.insertReview("John", "ART", "1100", "really liked", "4");
         db.disconnect();
     }
     @Test
