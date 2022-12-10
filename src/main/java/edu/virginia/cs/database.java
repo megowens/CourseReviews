@@ -144,7 +144,7 @@ public class database {
     public void insertReview(String studentName, String dept, String catalogNum, String message, String rating) {
         try {
             int studentID = getStudentID(studentName);
-            int courseID = getCourseID(dept, catalogNum);
+            int courseID = getCourseID(dept, catalogNum, true);
             int ratingInt = Integer.parseInt(rating);
             String sql = "INSERT INTO Reviews(StudentID, CourseID, Message, Rating) VALUES(?, ?, ?, ?)";
             PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -173,23 +173,23 @@ public class database {
         try {
             int ratingInt = Integer.parseInt(rating);
             if(ratingInt < 1 || ratingInt > 5) {
-                System.out.println("rating not a valid integer. Enter a integer from 1 - 5");
+                System.out.println("Rating not a valid integer. Enter a integer from 1 - 5");
                 return false;
             }
         }catch(NumberFormatException n) {
-            System.out.println("rating not a valid integer. Enter a integer from 1 - 5");
+            System.out.println("Rating not a valid integer. Enter a integer from 1 - 5");
             return false;
         }
         return true;
     }
 
-    /**returns true if student has already submitted a review- that is if the reviews table has a row
+    /**returns true if student has already submitted a review - that is if the reviews table has a row
      * with the students ID number and the course ID number*/
     public boolean checkReviewForStudent(String dept, String catalogNum, String studentName){
         try {
             int studentID = getStudentID(studentName);
 
-            int courseID = getCourseID(dept, catalogNum);
+            int courseID = getCourseID(dept, catalogNum, true);
 
             String query = "Select (count(*) > 0) as found FROM Reviews where StudentID = ? AND CourseID = ?";
             PreparedStatement pst = connection.prepareStatement(query);
@@ -213,7 +213,7 @@ public class database {
      */
     public boolean checkCourseForReviews(String dept, String catalog) {
         try{
-            int courseID = getCourseID(dept, catalog);
+            int courseID = getCourseID(dept, catalog, false);
             String query = "Select (count(*) > 0) as found FROM Reviews where courseID = ?";
             PreparedStatement pst = connection.prepareStatement(query);
             pst.setInt(1, courseID);
@@ -233,7 +233,7 @@ public class database {
     public ArrayList<String> getReviews(String dept, String catalog){
         try {
             ArrayList<String> reviewsList = new ArrayList<>();
-            int courseID = getCourseID(dept, catalog);
+            int courseID = getCourseID(dept, catalog, false);
             String getRevQuery = "Select * from Reviews where CourseID = ?";
             PreparedStatement pst = connection.prepareStatement(getRevQuery);
             pst.setInt(1, courseID);
@@ -257,11 +257,11 @@ public class database {
 
     /**
      * have exception as insert call because in the user interface all course titles are checked for validity
-     * before this method is ever called, so therefore any course that gets sent through here is valid to add
+     * before this method is ever called, therefore any course that gets sent through here is valid to add
      * to the table. The nested statement is for if there really is an issue with the table, though it should
      * be caught by other methods before ever getting caught here
      */
-    private int getCourseID(String dept, String catalogNum) {
+    private int getCourseID(String dept, String catalogNum, boolean insertIfAbsent) {
         try {
             String courseInfoQuery = "Select * from Courses where Department = ? AND Catalog_Number = ?";
             PreparedStatement CoursePst = connection.prepareStatement(courseInfoQuery);
@@ -271,9 +271,14 @@ public class database {
             int courseID = courseRS.getInt("id");
             return courseID;
         }catch(SQLException e){
-            insertCourse(dept, catalogNum);
-            int courseID = getCourseID(dept, catalogNum);
-            return courseID;
+            if(insertIfAbsent) {
+                insertCourse(dept, catalogNum);
+                int courseID = getCourseID(dept, catalogNum, insertIfAbsent);
+                return courseID;
+            }else{
+                int courseID = 0;
+                return courseID;
+            }
         }
     }
     private int getStudentID(String studentName) {

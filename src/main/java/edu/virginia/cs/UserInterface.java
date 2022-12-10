@@ -47,13 +47,14 @@ public class UserInterface {
             System.out.println("This student has already submitted a review for this course. Only one review is allowed per student per course");
             MainMenu();
         } else {
-            String message = promptAndRead("Please enter your review: ");
+            String message = promptAndRead("Please enter your review message: ");
             String rating = promptAndRead("Enter a numerical rating from 1 - 5 : ");
-            if(!db.getRatingInt(rating)){
-                MainMenu();
+            while(!db.getRatingInt(rating)){
+                rating = promptAndRead("Invalid rating. Enter a numerical rating from 1 - 5 : ");
             }
             db.insertReview(studentName, dept, catalogNum, message, rating);
             System.out.println("Review submitted!");
+            MainMenu();
         }
     }
     private void seeReview(String dept, String catalogNum) {
@@ -65,9 +66,9 @@ public class UserInterface {
             int size = reviewList.size();
             String ratingAvg = reviewList.get(size-1);
             for(int i = 0; i < size-1; i++) {
-                System.out.println(reviewList.get(i));
+                System.out.println("    " + (i+1) + ") " + reviewList.get(i));
             }
-            System.out.println("Course average: " + ratingAvg + "/5");
+            System.out.println("    Course average: " + ratingAvg + "/5");
             MainMenu();
         }
 
@@ -113,7 +114,7 @@ public class UserInterface {
                 uppercase = false;
             }
         }
-        if(dept.length() > 5 || !uppercase || catalog.length() > 4) {
+        if(dept.length() > 4 || !uppercase || catalog.length() != 4) {
             System.out.println("Incorrect format of class name. Enter department initials in capital letters followed by a space and then the catalog number, as in- CS 3140");
             MainMenu();
         }
