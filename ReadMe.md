@@ -1,14 +1,12 @@
-# [CS 3140: HW7] 
+# [CS 3140: HW7]
 
 ## Author
 
-* Meg Owens - mro9kh
+* Meg Owens
 
 ## Description
-*Building the program*
-    *1) Clone the repository - open intelliJ and got to file --> new --> project from version control
-        and select GitHub on the lefthand bar- find the repository for HW7 and clone*
-    *2) run chmod +x ./gradlew in terminal followed by ./gradlew*
+This program runs in the command line with the included database to allow users to submit and view reviews for different courses.
+
 *Running the program*
-    *1) Go to Main.java and run the main class, then follow the prompts in the Run tab as indicated on the bottom left bar*
+*1) Go to Main.java and run the program, then follow the prompts in the terminal*
 

@@ -106,15 +106,9 @@ public class UserInterface {
     }
     private void checkCourseName(String course) {
         String[] courseSplit = course.split(" ");
-        String dept = courseSplit[0];
+        String dept = courseSplit[0].toUpperCase();
         String catalog = courseSplit[1];
-        boolean uppercase = true;
-        for(int i = 0; i < dept.length(); i++) {
-            if(!isUpperCase(dept.charAt(i))){
-                uppercase = false;
-            }
-        }
-        if(dept.length() > 4 || !uppercase || catalog.length() != 4) {
+        if(dept.length() > 4 || catalog.length() != 4) {
             System.out.println("Incorrect format of class name. Enter department initials in capital letters followed by a space and then the catalog number, as in- CS 3140");
             MainMenu();
         }
